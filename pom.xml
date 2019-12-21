@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>groupId</groupId>
+    <artifactId>akka-java-cinnamon-datadog-seed</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <protobuf.version>3.6.1</protobuf.version>
+        <assertj.version>3.11.1</assertj.version>
+        <akka.version>2.5.22</akka.version>
+        <hub.protocol.version>0.17.0.175427</hub.protocol.version>
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <buildNumber>${maven.build.timestamp}</buildNumber>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <crs.protocol.version>0.1.0.20190510070749</crs.protocol.version>
+        <akka.grpc.version>0.6.1</akka.grpc.version>
+        <akka.cinnamon.version>2.12.4</akka.cinnamon.version>
+        <opentracing.datagod.version>2.12.4</opentracing.datagod.version>
+    </properties>
+
+<!--    libraryDependencies ++= Seq(-->
+<!--    "com.typesafe.akka" %% "akka-actor" % "2.5.3",-->
+<!--    "com.typesafe.akka" %% "akka-testkit" % "2.5.3" % "test",-->
+<!--    "org.scalatest" %% "scalatest" % "3.0.3" % "test",-->
+<!--    Cinnamon.library.cinnamonAkka,-->
+<!--    Cinnamon.library.Datadog-->
+<!--    )-->
+
+    <dependencies>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor_2.12</artifactId>
+            <version>${akka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-akka_2.12</artifactId>
+            <version>${akka.cinnamon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-opentracing_2.12</artifactId>
+            <version>${akka.cinnamon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-opentracing-datadog</artifactId>
+            <version>${opentracing.datagod.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-chmetrics3</artifactId>
+            <version>${akka.cinnamon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-chmetrics-elasticsearch-reporter</artifactId>
+            <version>${akka.cinnamon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lightbend.cinnamon</groupId>
+            <artifactId>cinnamon-chmetrics</artifactId>
+            <version>2.12.3</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.0.2</version>
+            <executions>
+            <execution>
+                <id>copy-dependencies</id>
+                <phase>prepare-package</phase>
+                <goals>
+                    <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                    <includeScope>runtime</includeScope>
+                    <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                </configuration>
+            </execution>
+            <execution>
+                <id>copy-agent</id>
+                <phase>prepare-package</phase>
+                <goals>
+                    <goal>copy</goal>
+                </goals>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>com.lightbend.cinnamon</groupId>
+                            <artifactId>cinnamon-agent</artifactId>
+                            <version>${akka.cinnamon.version}</version>
+                            <overWrite>true</overWrite>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <destFileName>cinnamon-agent.jar</destFileName>
+                        </artifactItem>
+                    </artifactItems>
+                </configuration>
+            </execution>
+            </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib</classpathPrefix>
+                            <mainClass>com.example.ApplicationMain</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
