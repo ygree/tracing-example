@@ -1,0 +1,3 @@
+#!/bin/sh
+mvn clean package
+java -Dlogback.configurationFile=./src/main/resources/logback.xml -Dconfig.file=./src/main/resources/application.conf -javaagent:./target/lib/cinnamon-agent.jar -jar ./target/akka-java-cinnamon-datadog-seed-1.0-SNAPSHOT.jar

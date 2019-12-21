@@ -23,11 +23,11 @@ class PingActor extends AbstractLoggingActor {
 	public Receive createReceive() {
 		return receiveBuilder()
 			.match(Initialize.class, t -> {
-				log().info("In PingActor - starting ping-pong");
+				// log().info("In PingActor - starting ping-pong");
 				pongActor.tell(new PingMessage("ping"), self());
 			})
 			.match(PongActor.PongMessage.class, t -> {
-				log().info("In PingActor - received message: {}", t.text);
+				// log().info("In PingActor - received message: {}", t.text);
 				counter += 1;
 				if (counter == counterIteration) this.context().system().terminate();
 				else sender().tell(new PingMessage("ping"), self());

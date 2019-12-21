@@ -14,7 +14,7 @@ class PongActor extends AbstractLoggingActor {
    public Receive createReceive() {
       return receiveBuilder()
         .match(PingMessage.class, t -> {
-          log().info("In PongActor - received message: {}", t.text);
+          // log().info("In PongActor - received message: {}", t.text);
           sender().tell(new PongMessage("pong"), self());
         })
         .build();
